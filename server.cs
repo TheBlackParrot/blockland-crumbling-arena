@@ -30,22 +30,36 @@ package CrumblePackage {
 		}
 		$Crumbling::HasStarted = 1;
 		%this.respawnAll();
+		%this.onGoing = 0;
+		cancel(%this.cheatTick);
+		cancel(%this.countdownLoop);
+		cancel(%this.resetSched);
+		cancel($Crumbling::BuildSched);
 		%this.startGame();
 		return parent::reset(%this);
 	}
 
 	function MinigameSO::checkLastManStanding(%this) {
+		if($Crumbling::BuildingBoard) {
+			return;
+		}
 		%count = 0;
 		for(%i=0;%i<%this.numMembers;%i++) {
 			%client = %this.member[%i];
 			if(isObject(%client.player)) {
 				if(%client.player.getState() !$= "Dead") {
 					%count++;
+					%selected = %client.player;
 				}
 			}
 		}
-		if(%count <= 1) {
+		if(%count == 1) {
 			%this.playSound(gameEnd);
+			%selected.canBreak = 0;
+			cancel(%this.cheatTick);
+			cancel(%this.countdownLoop);
+			cancel(%this.resetSched);
+			cancel($Crumbling::BuildSched);
 		}
 		return parent::checkLastManStanding(%this);
 	}

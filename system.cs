@@ -1,4 +1,8 @@
 function MinigameSO::startGame(%this) {
+	if(%this.onGoing) {
+		return;
+	}
+	%this.onGoing = 1;
 	%this.startedGameAt = 0;
 	%this.schedule(1000,doCountdown,9);
 	%this.playSound(gameStartPre);

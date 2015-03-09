@@ -29,6 +29,18 @@ function startBuildingBoard(%size,%colors,%brick,%spaced) {
 	}
 	messageAll('MsgUploadStart',"\c0Loading " @ %spacedstr SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait...");
 	buildBoard(0,0,0,%brick,getWord(%size,0) SPC getWord(%size,1) SPC getWord(%size,2)-1,%colors,%spaced);
+
+
+	for(%i=0;%i<$DefaultMinigame.numMembers;%i++) {
+		%client = $DefaultMinigame.member[%i];
+		if(isObject(%client.player)) {
+			%client.player.delete();
+			%camera = %client.Camera;
+			%camera.setFlyMode();
+			%camera.mode = "Observer";
+			%client.setControlObject(%camera);
+		}
+	}
 }
 
 function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%spaced) {
