@@ -96,14 +96,14 @@ $MiniGame::SelfDamage 1
 $MiniGame::VehicleDamage 0
 $MiniGame::BrickDamage 0
 $MiniGame::EnableWand 0
-$MiniGame::EnableBuilding 1
+$MiniGame::EnableBuilding 0
 $MiniGame::EnablePainting 1
 $MiniGame::BotDamage 1
 $MiniGame::BotRespawnTime 15
 $MiniGame::Points_KillBot 0
 $MiniGame::PlayerDataBlockName No-Jet Player
 
-$MiniGame::StartEquipName0 0
+$MiniGame::StartEquipName0 Printer
 $MiniGame::StartEquipName1 0 
 $MiniGame::StartEquipName2 0
 $MiniGame::StartEquipName3 0

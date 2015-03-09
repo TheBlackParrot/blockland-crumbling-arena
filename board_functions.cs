@@ -12,20 +12,26 @@ function startNewBoard() {
 	%brick = getWord($Crumbling::AcceptedBricks,getRandom(0,getWordCount($Crumbling::AcceptedBricks)-1));
 	%x = getRandom(16,24)*(mCeil($DefaultMinigame.numMembers/2.6));
 	%y = getRandom(16,24)*(mCeil($DefaultMinigame.numMembers/2.6));
-	%z = getRandom(1,12);
+	%z = getRandom(1,13);
+	%spaced = getRandom(0,8);
 
-	startBuildingBoard(%x SPC %y SPC %z,%colors,%brick);
+	startBuildingBoard(%x SPC %y SPC %z,%colors,%brick,%spaced);
 	ArenaSpawnPoints.clear();
 }
-function startBuildingBoard(%size,%colors,%brick) {
+function startBuildingBoard(%size,%colors,%brick,%spaced) {
 	BrickGroup_888888.deleteAll();
 	$Crumbling::BuildingBoard = 1;
 	$Crumbling::BuildStart = getRealTime();
-	messageAll('MsgUploadStart',"\c0Loading a" SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait...");
-	buildBoard(0,0,0,%brick,getWord(%size,0),getWord(%size,1),getWord(%size,2)-1,%colors);
+	if(!%spaced) {
+		%spacedstr = "an Expanded";
+	} else {
+		%spacedstr = "a";
+	}
+	messageAll('MsgUploadStart',"\c0Loading " @ %spacedstr SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait...");
+	buildBoard(0,0,0,%brick,getWord(%size,0) SPC getWord(%size,1) SPC getWord(%size,2)-1,%colors,%spaced);
 }
 
-function buildBoard(%x,%y,%z,%brickdata,%maxx,%maxy,%maxz,%gradient) {
+function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%spaced) {
 	%size[x] = %brickdata.brickSizeX/2;
 	%size[y] = %brickdata.brickSizeY/2;
 	%size[z] = %brickdata.brickSizeZ/5;
@@ -38,7 +44,15 @@ function buildBoard(%x,%y,%z,%brickdata,%maxx,%maxy,%maxz,%gradient) {
 	%pos[y] = (%y*%size[y])+%offset[y];
 	%pos[z] = (%z*%size[z])+%offset[z];
 
-	%color = (%maxz-%z)+(12*%gradient);
+	%max[x] = getWord(%max,0);
+	%max[y] = getWord(%max,1);
+	%max[z] = getWord(%max,2);
+
+	if(!%spaced) {
+		%pos[z] += (%z*12)+%size[z];
+	}
+
+	%color = (%max[z]-%z)+(12*%gradient);
 
 	%brick = new fxDTSBrick(ArenaBrick) {
 		angleID = 0;
@@ -54,7 +68,7 @@ function buildBoard(%x,%y,%z,%brickdata,%maxx,%maxy,%maxz,%gradient) {
 		shapeFxID = 0;
 		stackBL_ID = 888888;
 	};
-	if(%z == %maxz) {
+	if(%z == %max[z]) {
 		%spawn = new ScriptObject(ArenaSpawnPoint) {
 			position = %pos[x] SPC %pos[y] SPC %pos[z]+%size[z];
 		};
@@ -65,20 +79,20 @@ function buildBoard(%x,%y,%z,%brickdata,%maxx,%maxy,%maxz,%gradient) {
 	%brick.setTrusted(1);
 
 	%x++;
-	if(%z >= %maxz && %y >= %maxy && %x >= %maxx) {
+	if(%z >= %max[z] && %y >= %max[y] && %x >= %max[x]) {
 		endBuildBoard();
 		return;
 	}
-	if(%y >= %maxy && %x >= %maxx) {
+	if(%y >= %max[y] && %x >= %max[x]) {
 		%x = 0;
 		%y = 0;
 		%z++;
 	}
-	if(%x >= %maxx) {
+	if(%x >= %max[x]) {
 		%x = 0;
 		%y++;
 	}
-	$Crumbling::BuildSched = schedule(2,0,buildBoard,%x,%y,%z,%brickdata,%maxx,%maxy,%maxz,%gradient);
+	$Crumbling::BuildSched = schedule(2,0,buildBoard,%x,%y,%z,%brickdata,%max,%gradient,%spaced);
 }
 
 function endBuildBoard() {
