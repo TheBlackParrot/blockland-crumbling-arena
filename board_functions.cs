@@ -10,8 +10,8 @@ if(!isObject(ArenaSpawnPoints)) {
 function startNewBoard() {
 	%colors = getRandom(0,4);
 	%brick = getWord($Crumbling::AcceptedBricks,getRandom(0,getWordCount($Crumbling::AcceptedBricks)-1));
-	%x = getRandom(16,24)*(mCeil($DefaultMinigame.numMembers/2.6));
-	%y = getRandom(16,24)*(mCeil($DefaultMinigame.numMembers/2.6));
+	%x = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
+	%y = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
 	%z = getRandom(1,13);
 	%spaced = getRandom(0,8);
 

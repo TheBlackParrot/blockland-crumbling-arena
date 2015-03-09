@@ -30,11 +30,7 @@ package CrumblePackage {
 		}
 		$Crumbling::HasStarted = 1;
 		%this.respawnAll();
-		%this.onGoing = 0;
-		cancel(%this.cheatTick);
-		cancel(%this.countdownLoop);
-		cancel(%this.resetSched);
-		cancel($Crumbling::BuildSched);
+		%this.cancelGame();
 		%this.startGame();
 		return parent::reset(%this);
 	}
@@ -56,10 +52,7 @@ package CrumblePackage {
 		if(%count == 1) {
 			%this.playSound(gameEnd);
 			%selected.canBreak = 0;
-			cancel(%this.cheatTick);
-			cancel(%this.countdownLoop);
-			cancel(%this.resetSched);
-			cancel($Crumbling::BuildSched);
+			%this.cancelGame();
 		}
 		return parent::checkLastManStanding(%this);
 	}
@@ -98,10 +91,7 @@ package CrumblePackage {
 
 	function onServerDestroyed() {
 		%mg = $DefaultMinigame;
-		cancel(%mg.cheatTick);
-		cancel(%mg.countdownLoop);
-		cancel(%mg.resetSched);
-		cancel($Crumbling::BuildSched);
+		%mg.cancelGame();
 		return parent::onServerDestroyed();
 	}
 };

@@ -11,6 +11,48 @@ function MinigameSO::startGame(%this) {
 	}
 }
 
+function MinigameSO::cancelGame(%this,%delete) {
+	%this.onGoing = 0;
+	cancel(%this.cheatTick);
+	cancel(%this.countdownLoop);
+	cancel(%this.resetSched);
+	cancel(%this.speedSched);
+	cancel($Crumbling::BuildSched);
+	if(%delete) {
+		for(%i=0;%i<$DefaultMinigame.numMembers;%i++) {
+			%client = $DefaultMinigame.member[%i];
+			if(isObject(%client.player)) {
+				%client.player.delete();
+				%camera = %client.Camera;
+				%camera.setFlyMode();
+				%camera.mode = "Observer";
+				%client.setControlObject(%camera);
+			}
+		}
+	}
+}
+
+function MinigameSO::speedLoop(%this) {
+	cancel(%this.speedSched);
+	if(%this.onGoing && BrickGroup_888888.getCount() > 200) {
+		%this.speedSched = %this.schedule(mCeil(50000/BrickGroup_888888.getCount()),speedLoop);
+	}
+	if(!$Crumbling::AnnouncedSpeed) {
+		messageAll('',"\c6Let's speed it up a bit!");
+		$Crumbling::AnnouncedSpeed = 1;
+	}
+
+	%brick = BrickGroup_888888.getObject(getRandom(0,BrickGroup_888888.getCount()-1));
+	while(!isObject(%brick)) {
+		%brick = BrickGroup_888888.getObject(getRandom(0,BrickGroup_888888.getCount()-1));
+	}
+	while(isEventPending(%brick.breakSched)) {
+		%brick = BrickGroup_888888.getObject(getRandom(0,BrickGroup_888888.getCount()-1));
+	}
+
+	%brick.breakBrick();
+}
+
 function MinigameSO::cheatLoop(%this) {
 	cancel(%this.cheatTick);
 	%this.cheatTick = %this.schedule(5000,cheatLoop);
@@ -40,6 +82,8 @@ function MinigameSO::doCountdown(%this,%x) {
 			}
 		}
 		%this.centerPrintAll("<font:Arial Bold:48>\c1START!",3);
+		$Crumbling::AnnouncedSpeed = 0;
+		%this.speedSched = %this.schedule(120000,speedLoop);
 		%this.startedGameAt = getSimTime();
 		%this.playSound(gameStart);
 		return;
