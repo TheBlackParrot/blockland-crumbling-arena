@@ -12,7 +12,7 @@ function startNewBoard() {
 	%brick = getWord($Crumbling::AcceptedBricks,getRandom(0,getWordCount($Crumbling::AcceptedBricks)-1));
 	%x = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
 	%y = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
-	%z = getRandom(1,13);
+	%z = getRandom(1,12);
 	%spaced = getRandom(0,8);
 
 	startBuildingBoard(%x SPC %y SPC %z,%colors,%brick,%spaced);
@@ -27,7 +27,7 @@ function startBuildingBoard(%size,%colors,%brick,%spaced) {
 	} else {
 		%spacedstr = "a";
 	}
-	messageAll('MsgUploadStart',"\c0Loading " @ %spacedstr SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait...");
+	messageAll('MsgUploadStart',"\c0Loading " @ %spacedstr SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait... \c7[ETA:" SPC getTimeString((getWord(%size,0)*getWord(%size,1)*getWord(%size,2)*2)/1000) @ "]");
 	buildBoard(0,0,0,%brick,getWord(%size,0) SPC getWord(%size,1) SPC getWord(%size,2)-1,%colors,%spaced);
 
 
@@ -41,6 +41,8 @@ function startBuildingBoard(%size,%colors,%brick,%spaced) {
 			%client.setControlObject(%camera);
 		}
 	}
+
+	$Crumbling::BrickArea = %brick.brickSizeX * %brick.brickSizeY;
 }
 
 function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%spaced) {
@@ -66,7 +68,9 @@ function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%spaced) {
 
 	%color = (%max[z]-%z)+(12*%gradient);
 
-	%brick = new fxDTSBrick(ArenaBrick) {
+	%name = "ArenaBrick_" @ %x @ "_" @ %y @ "_" @ %z;
+
+	%brick = new fxDTSBrick(%name) {
 		angleID = 0;
 		colorFxID = 0;
 		colorID = %color;
@@ -79,6 +83,7 @@ function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%spaced) {
 		scale = "1 1 1";
 		shapeFxID = 0;
 		stackBL_ID = 888888;
+		rand = %ter_rand;
 	};
 	if(%z == %max[z]) {
 		%spawn = new ScriptObject(ArenaSpawnPoint) {
