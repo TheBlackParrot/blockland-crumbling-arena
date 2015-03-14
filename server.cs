@@ -15,6 +15,9 @@ datablock AudioProfile(gameStart:ping1) { filename = "./sounds/gameStart-Post.wa
 datablock AudioProfile(gameStartPre:ping1) { filename = "./sounds/gameStart-Pre.wav"; };
 datablock AudioProfile(gameEnd:ping1) { filename = "./sounds/gameEnd.wav"; };
 
+PlayerLight.radius = 25;
+PlayerLight.brightness = 3;
+
 package CrumblePackage {
 	function MinigameSO::reset(%this) {
 		if(!$Crumbling::BuildingBoard && $Crumbling::HasStarted) {
@@ -79,9 +82,9 @@ package CrumblePackage {
 
 	function fxDTSBrick::breakBrick(%this) {
 		%this.setColorFX(3);
-		%this.breakSched = %this.schedule(300,disappear,10);
-		%this.soundSched = %this.schedule(300,playSound,brickPlantSound);
-		%this.deleteSched = %this.schedule(1000,delete);
+		%this.breakSched = %this.schedule(500,disappear,10);
+		%this.soundSched = %this.schedule(500,playSound,brickPlantSound);
+		%this.deleteSched = %this.schedule(1200,delete);
 	}
 
 	function PlayerStandardArmor::onEnterLiquid(%data,%obj,%coverage,%type) {
