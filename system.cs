@@ -20,6 +20,8 @@ function MinigameSO::cancelGame(%this,%delete) {
 	cancel(%this.speedSched);
 	cancel(%this.modifierLoopSched);
 	cancel(%this.environmentSched);
+	cancel(%this.lightsSched);
+	cancel(%this.sizeSched);
 	setEnvironmentTheme("default");
 	cancel($Crumbling::BuildSched);
 	if(%delete) {
@@ -106,22 +108,79 @@ function MinigameSO::modifierLoop(%this) {
 	cancel(%this.modifierLoopSched);
 	%delay_modif = getRandom(-1500,1500);
 	%this.modifierLoopSched = %this.schedule(30000+%delay_modif,modifierLoop);
-	serverPlay2D(lightOnSound);
 
-	%item = getRandom(0,2);
+	%item = getRandom(4,4);
 	switch(%item) {
 		case 0:
 			setEnvironmentTheme("dark");
 			messageAll('',"\c4AI\c6: Oops, sorry, black hole.");
 			%this.environmentSched = schedule(15000+%delay_modif,0,setEnvironmentTheme,"default");
+			%this.toggleLights(1);
+			%this.lightsSched = %this.schedule(15000+%delay_modif,toggleLights,0);
 		case 1:
 			if($Crumbling::BrickArea > 16) {
 				messageAll('',"\c4AI\c6: Have a free pushbroom!");
 				%this.giveItem("Push Broom",%delay_modif);
+			} else {
+				return;
 			}
 		case 2:
 			messageAll('',"\c4AI\c6: Have a free sword!");
 			%this.giveItem("Sword",%delay_modif);
+		case 3:
+			messageAll('',"\c4AI\c6: You all seem a bit, larger than normal...");
+			%this.sizePlayers(2);
+			%this.sizeSched = %this.schedule(15000+%delay_modif,sizePlayers,1);
+		case 4:
+			messageAll('',"\c4AI\c6: Sorry, I seemed to have shuffled you up...");
+			%this.randomizePlayerPositions();
+	}		
+	serverPlay2D(lightOnSound);
+}
+
+function MinigameSO::randomizePlayerPositions(%this) {
+	%count = 0;
+	for(%i=0;%i<%this.numMembers;%i++) {
+		%client = %this.member[%i];
+		if(isObject(%client.player)) {
+			%pos[%count] = %client.player.getTransform();
+			%vel[%count] = %client.player.getVelocity();
+			%player[%count] = %client.player;
+			%count++;
+		}
+	}
+	for(%i=0;%i<%count;%i++) {
+		%new_pos = getRandom(0,%count-1);
+		while(%selected[%new_pos]) {
+			%new_pos = getRandom(0,%count-1);
+		}
+		%selected[%new_pos] = 1;
+		%player[%i].setTransform(%pos[%new_pos]);
+		%player[%i].setVelocity("0 0 0");
+		%player[%i].addVelocity(%vel[%new_pos]);
+	}
+}
+
+function MinigameSO::toggleLights(%this,%bool) {
+	for(%i=0;%i<%this.numMembers;%i++) {
+		%client = %this.member[%i];
+		if(isObject(%client.player)) {
+			if(!isObject(%client.player.light) && %bool) {
+				serverCmdLight(%client);
+			}
+			if(isObject(%client.player.light) && !%bool) {
+				serverCmdLight(%client);
+			}
+		}
+	}
+}
+
+function MinigameSO::sizePlayers(%this,%size) {
+	for(%i=0;%i<%this.numMembers;%i++) {
+		%client = %this.member[%i];
+		if(isObject(%client.player)) {
+			%client.player.setPlayerScale(%size SPC %size SPC %size);
+		}
 	}
 }
 
