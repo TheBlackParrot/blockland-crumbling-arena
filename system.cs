@@ -109,7 +109,7 @@ function MinigameSO::modifierLoop(%this) {
 	%delay_modif = getRandom(-1500,1500);
 	%this.modifierLoopSched = %this.schedule(30000+%delay_modif,modifierLoop);
 
-	%item = getRandom(4,4);
+	%item = getRandom(0,4);
 	switch(%item) {
 		case 0:
 			setEnvironmentTheme("dark");
