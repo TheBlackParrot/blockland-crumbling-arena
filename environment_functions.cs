@@ -62,6 +62,10 @@ function initEnvDB() {
 initEnvDB();
 
 function loadEnvironment(%file) {
+	if(!isFile(%file)) {
+		gameDebugMessage("Env","Attempted to change the environment, but the env file specified doesn't exist.","error",1);
+		return;
+	}
 	%res = GameModeGuiServer::parseGameModeFile(%file,1);
 
 	EnvGuiServer::getIdxFromFilenames();

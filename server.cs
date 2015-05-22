@@ -3,9 +3,10 @@ exec("./system.cs");
 exec("./board_functions.cs");
 exec("./player_functions.cs");
 exec("./environment_functions.cs");
+exec("./rocket_functions.cs");
 
 $Crumbling::Debug = 1;
-$Crumbling::Version = "0.3.0-8";
+$Crumbling::Version = "0.3.2-2";
 gameDebugMessage("Core","Crumbling Arena II, version" SPC $Crumbling::Version,"info",1);
 
 datablock AudioProfile(ping1)

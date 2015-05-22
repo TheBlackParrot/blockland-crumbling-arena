@@ -156,6 +156,7 @@ function buildBoard(%x,%y,%z,%brickdata,%max,%gradient,%mods) {
 	if(%z == %max[z]) {
 		%spawn = new ScriptObject(ArenaSpawnPoint) {
 			position = %pos[x]*%mult SPC %pos[y]*%mult SPC %pos[z]+%size[z];
+			brick = %brick;
 		};
 		ArenaSpawnPoints.add(%spawn);
 	}
