@@ -9,7 +9,7 @@ if(!isObject(ArenaSpawnPoints)) {
 
 function startNewBoard() {
 	EnvDBGroup.setEnvironmentTheme(getRandom(0,EnvDBGroup.getCount()));
-	
+
 	%colors = getRandom(0,4);
 	%brick = getWord($Crumbling::AcceptedBricks,getRandom(0,getWordCount($Crumbling::AcceptedBricks)-1));
 	%x = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
@@ -73,7 +73,8 @@ function startBuildingBoard(%size,%colors,%brick,%mods) {
 		%modstr = "[Random Color]" SPC %modstr;
 	}
 
-	messageAll('MsgUploadStart',"\c0Loading" SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait... \c7[ETA:" SPC getTimeString((getWord(%size,0)*getWord(%size,1)*getWord(%size,2)*2)/1000) @ "]");
+	messageAll('MsgUploadStart',"\c0Loading" SPC getWord(%size,0) @ "x" @ getWord(%size,1) @ "x" @ getWord(%size,2) SPC %brick.uiName SPC "brick arena. Please wait... \c7[ETA:" SPC getTimeString(((getWord(%size,0)*getWord(%size,1)*getWord(%size,2)*2)/($fps::virtual/500))/1000) @ "]");
+	gameDebugMessage("Core","FPS values:" SPC $fps::real SPC "[real]" SPC $fps::virtual SPC "[virtual]",info);
 	if(strLen(%modstr) > 0) {
 		messageAll('',"\c0MODIFIERS:" SPC %modstr);
 	}

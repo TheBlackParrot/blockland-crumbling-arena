@@ -5,7 +5,7 @@ exec("./player_functions.cs");
 exec("./environment_functions.cs");
 
 $Crumbling::Debug = 1;
-$Crumbling::Version = "0.3.0-7";
+$Crumbling::Version = "0.3.0-8";
 gameDebugMessage("Core","Crumbling Arena II, version" SPC $Crumbling::Version,"info",1);
 
 datablock AudioProfile(ping1)
