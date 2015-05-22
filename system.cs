@@ -2,7 +2,6 @@ function MinigameSO::startGame(%this) {
 	if(%this.onGoing) {
 		return;
 	}
-	setEnvironmentTheme("default");
 	%this.onGoing = 1;
 	%this.startedGameAt = 0;
 	%this.schedule(1000,doCountdown,9);
@@ -22,7 +21,6 @@ function MinigameSO::cancelGame(%this,%delete) {
 	cancel(%this.environmentSched);
 	cancel(%this.lightsSched);
 	cancel(%this.sizeSched);
-	setEnvironmentTheme("default");
 	cancel($Crumbling::BuildSched);
 	if(%delete) {
 		for(%i=0;%i<$DefaultMinigame.numMembers;%i++) {
@@ -109,14 +107,15 @@ function MinigameSO::modifierLoop(%this) {
 	%delay_modif = getRandom(-1500,1500);
 	%this.modifierLoopSched = %this.schedule(30000+%delay_modif,modifierLoop);
 
-	%item = getRandom(0,4);
+	%item = getRandom(1,4);
 	switch(%item) {
-		case 0:
-			setEnvironmentTheme("dark");
-			messageAll('',"\c4AI\c6: Oops, sorry, black hole.");
-			%this.environmentSched = schedule(15000+%delay_modif,0,setEnvironmentTheme,"default");
-			%this.toggleLights(1);
-			%this.lightsSched = %this.schedule(15000+%delay_modif,toggleLights,0);
+		// -- deprecated due to new environment system, seems a bit pointless now --
+		//case 0:
+		//	setEnvironmentTheme("dark");
+		//	messageAll('',"\c4AI\c6: Oops, sorry, black hole.");
+		//	%this.environmentSched = schedule(15000+%delay_modif,0,setEnvironmentTheme,"default");
+		//	%this.toggleLights(1);
+		//	%this.lightsSched = %this.schedule(15000+%delay_modif,toggleLights,0);
 		case 1:
 			if($Crumbling::BrickArea > 16) {
 				messageAll('',"\c4AI\c6: Have a free pushbroom!");

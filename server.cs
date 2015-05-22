@@ -2,6 +2,11 @@ exec("./support.cs");
 exec("./system.cs");
 exec("./board_functions.cs");
 exec("./player_functions.cs");
+exec("./environment_functions.cs");
+
+$Crumbling::Debug = 1;
+$Crumbling::Version = "0.3.0-7";
+gameDebugMessage("Core","Crumbling Arena II, version" SPC $Crumbling::Version,"info",1);
 
 datablock AudioProfile(ping1)
 {
@@ -95,6 +100,12 @@ package CrumblePackage {
 	function onServerDestroyed() {
 		%mg = $DefaultMinigame;
 		%mg.cancelGame();
+		if(isObject(EnvDBGroup)) {
+			while(EnvDBGroup.getCount() > 0) {
+				EnvDBGroup.getObject(0).delete();
+			}
+			EnvDBGroup.delete();
+		}
 		return parent::onServerDestroyed();
 	}
 };

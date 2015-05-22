@@ -33,7 +33,7 @@ ADDON Weapon_Rocket_Launcher
 ADDON Weapon_Spear
 ADDON Weapon_Sword
 
-ADDON GameMode_Crumbling_Arena_Two
+ADDON GameMode_Crumbling_Arena_II
 
 //ADDON Script_CustomMS
 ADDON Script_Eval

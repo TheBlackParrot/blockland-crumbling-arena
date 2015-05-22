@@ -1,0 +1,33 @@
+EnvironmentName Frigid
+SimpleMode 0
+SkyFile Add-Ons/Sky_Spooky3/Spooky3.dml
+WaterFile Add-Ons/Water_Default/default.water
+GroundFile Add-Ons/Ground_Plate/plate.ground
+SunFlareTopTexture base/lighting/lightFalloffMono.png
+SunFlareBottomTexture base/lighting/flare2.png
+DayOffset 
+DayLength 300
+DayCycleEnabled 0
+DayCycle Add-Ons/DayCycle_Default/default.daycycle
+SunAzimuth 345.231
+SunElevation 8.46154
+DirectLightColor 0.813084 0.813084 1.000000 1.000000
+AmbientLightColor 0.284391 0.284391 0.345794 1.000000
+ShadowColor 0.352322 0.325676 0.387850 1.000000
+SunFlareColor 0.247664 0.247664 0.247664 1.000000
+SunFlareSize 1.53846
+VisibleDistance 600
+FogDistance 100
+FogHeight 
+FogColor 0.900000 0.900000 0.900000 1.000000
+WaterColor 255 255 255 128
+WaterHeight 10
+UnderWaterColor 0 0 128 128
+SkyColor 1.0 1.0 1.0 1.0
+WaterScrollX 0
+WaterScrollY 0
+GroundColor 1.000000 1.000000 1.000000 1.000000
+GroundScrollX 0
+GroundScrollY 0
+VignetteMultiply 0
+VignetteColor 1.000000 1.000000 1.000000 0.752336

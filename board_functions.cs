@@ -8,6 +8,8 @@ if(!isObject(ArenaSpawnPoints)) {
 }
 
 function startNewBoard() {
+	EnvDBGroup.setEnvironmentTheme(getRandom(0,EnvDBGroup.getCount()));
+	
 	%colors = getRandom(0,4);
 	%brick = getWord($Crumbling::AcceptedBricks,getRandom(0,getWordCount($Crumbling::AcceptedBricks)-1));
 	%x = getRandom(12,20)*(mCeil($DefaultMinigame.numMembers/8));
